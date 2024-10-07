@@ -28,7 +28,6 @@ public static class ProgramExtensions
             })
             .AddEntityFrameworkStores<AppDbContext>();
 
-        // Добавляем ProjectService
         builder.Services.AddTransient<IProjectService, ProjectService>();
         builder.Services.AddTransient<IDesigneObjService, DesigneObjService>();
     }
