@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Migrations.Operations;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
 using ProjForProj.Api.Common;
 using ProjForProj.Api.Domain.Entity;
 
@@ -37,6 +38,8 @@ namespace ProjForProj.Api.DAL
                 .HasMany(p => p.DesignObjects)
                 .WithOne(o => o.Project)
                 .HasForeignKey(o => o.ProjectId);
+
+            modelBuilder.Entity<Project>().HasQueryFilter(p => !p.IsDeleted);
 
             modelBuilder.Entity<DesignObject>()
                 .HasMany(o => o.ChildObjects)

@@ -9,22 +9,40 @@ using System.Security.Claims;
 
 namespace ProjForProj.Api.Services
 {
+
     public class ProjectService(AppDbContext dbContext, UserManager<AppUser> userManager) : IProjectService
     {
         private readonly AppDbContext _dbContext = dbContext;
         private readonly UserManager<AppUser> userManager = userManager;
 
-        public async Task<IEnumerable<Project>> GetAllAsync()
+        public async Task<Res<IEnumerable<Project>>> GetAllAsync()
         {
-            return await _dbContext.Projects.ToListAsync();
+            //TODO в ef настроен фильтр для удаления из выборки элементов с isDeleted==true
+            var res =  await _dbContext.Projects
+                .ToListAsync();
+
+            return new Res<IEnumerable<Project>>(res);
         }
 
-        public async Task<Res<Project>> GetByIdAsync(Guid id)
+        public async Task<Res<ProjectResponse>> GetByIdAsync(Guid id)
         {
-            var project = await _dbContext.Projects.FindAsync(id);
+            var project = await _dbContext.Projects
+                .Where(p => p.Id == id)
+                .Include(p => p.DesignObjects)
+                .Select(p => new ProjectResponse
+                {
+                    Code = p.Code,
+                    Name = p.Name,
+                    DesignObjectsIds = p.DesignObjects.Select(d => d.Id).ToList(),
+                    Id = id,
+                    IsDeleted = p.IsDeleted,
+                })
+                .FirstOrDefaultAsync();
+
             if (project == null)
-                return new Res<Project>($"Project with ID {id} not found.");
-            return new Res<Project>(project);
+                return new Res<ProjectResponse>($"Project with ID {id} not found.");
+
+            return new Res<ProjectResponse>(project);
         }
 
         public async Task<Res<bool>> CreateAsync(Project project)

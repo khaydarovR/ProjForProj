@@ -4,8 +4,8 @@ using ProjForProj.Api.Domain.Entity;
 
 public interface IProjectService
 {
-    Task<IEnumerable<Project>> GetAllAsync();
-    Task<Res<Project>> GetByIdAsync(Guid id);
+    Task<Res<IEnumerable<Project>>> GetAllAsync();
+    Task<Res<ProjectResponse>> GetByIdAsync(Guid id);
     Task<Res<bool>> CreateAsync(Project project);
     Task<Res<bool>> UpdateAsync(Project project);
     Task<Res<bool>> DeleteAsync(Guid id);

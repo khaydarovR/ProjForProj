@@ -30,6 +30,7 @@ public static class ProgramExtensions
 
         // Добавляем ProjectService
         builder.Services.AddTransient<IProjectService, ProjectService>();
+        builder.Services.AddTransient<IDesigneObjService, DesigneObjService>();
     }
 
 

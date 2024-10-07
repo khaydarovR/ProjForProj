@@ -24,8 +24,10 @@ public class ProjectsController : CustomController
     [HttpGet]
     public async Task<IActionResult> GetAll()
     {
-        var projects = await _projectService.GetAllAsync();
-        return Ok(projects);
+        var res = await _projectService.GetAllAsync();
+        return res.IsSuccess ? Ok(res.Data) : BadRequest(res.ErrorList);
+
+        //TODO добавить мидлвар для отлова ошибок (+логи)
     }
 
     /// <summary>
@@ -49,9 +51,11 @@ public class ProjectsController : CustomController
     [HttpPost]
     public async Task<IActionResult> Create(CreateProjectRequest dto)
     {
-        //TO DO в сервис передавать отдельный dto, т.к. контроллеры не должны знать про уровень domain,
-        // а сервисы должны работать независомо от dto в http запросах (для маппинга можно юзать mapster)
+        //TODO в сервис передавать отдельный dto, т.к. контроллеры не должны знать про уровень domain
+        // Cервисы тоже должны работать независимо от dto в http запросах
         // напрмер эти сервисы могут исползоваться не только в web api а напрмер на MVC сайте
+        // (ApiController -> Services(App) -> DAL -> Domain)
+        // Т.о Для схемы http запросов свои DTO, для сервисов свои  (для маппинга можно юзать mapster)
 
         var proj = new Project() { Name = dto.Name, Code = dto.Code };
         var res = await _projectService.CreateAsync(proj);

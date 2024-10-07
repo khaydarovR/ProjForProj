@@ -10,4 +10,5 @@
         public DesignObject DesignObject { get; set; }
         public string FullCode { get; set; }
     }
+
 }

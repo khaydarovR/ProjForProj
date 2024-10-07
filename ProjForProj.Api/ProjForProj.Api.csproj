@@ -18,8 +18,4 @@
     <ProjectReference Include="..\ProjForProj.ServiceDefaults\ProjForProj.ServiceDefaults.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="ApiContract\Responses\" />
-  </ItemGroup>
-
 </Project>
